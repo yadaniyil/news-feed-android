@@ -5,7 +5,7 @@ import com.yadaniyil.newsfeedandroid.models.Article
 
 class ArticleDiffCallback : DiffUtil.ItemCallback<Article>() {
     override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.storyId == newItem.storyId
     }
 
     override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
