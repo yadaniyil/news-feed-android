@@ -15,6 +15,9 @@ import com.yadaniyil.newsfeedandroid.visible
 import kotlinx.android.synthetic.main.articles_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.yadaniyil.newsfeedandroid.api.State
+import androidx.recyclerview.widget.DividerItemDecoration
+
+
 
 class ArticlesListFragment : Fragment() {
 
@@ -37,6 +40,8 @@ class ArticlesListFragment : Fragment() {
         articles_list.apply {
             layoutManager = viewManager
             adapter = articlesAdapter
+            addItemDecoration(DividerItemDecoration(context!!,
+                    DividerItemDecoration.VERTICAL))
         }
 
         vm.newsList.observe(this, Observer {

@@ -3,4 +3,5 @@
     <dimen name="list_item_article_height">80dp</dimen>
     <dimen name="half_standard_dimen">8dp</dimen>
     <dimen name="standard_dimen">16dp</dimen>
+    <dimen name="text_size_title">18sp</dimen>
 </resources>

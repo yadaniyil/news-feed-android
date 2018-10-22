@@ -10,9 +10,10 @@ import kotlinx.android.synthetic.main.list_item_article.view.*
 
 class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    fun bind(news: Article?) {
-        if (news != null) {
-            itemView.article_title.text = news.title
+    fun bind(article: Article?) {
+        if (article != null) {
+            itemView.article_title.text = article.title
+            itemView.article_time.text = article.createdAt
         }
     }
 
