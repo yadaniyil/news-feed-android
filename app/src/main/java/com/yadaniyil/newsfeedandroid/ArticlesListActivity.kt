@@ -1,6 +1,6 @@
 package com.yadaniyil.newsfeedandroid
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.yadaniyil.newsfeedandroid.ui.articleslist.ArticlesListFragment
 
