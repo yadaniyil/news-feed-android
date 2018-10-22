@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yadaniyil.newsfeedandroid.R
+import com.yadaniyil.newsfeedandroid.*
+import com.yadaniyil.newsfeedandroid.models.Article
+import com.yadaniyil.newsfeedandroid.models.Resource
+import com.yadaniyil.newsfeedandroid.models.Status
 import kotlinx.android.synthetic.main.articles_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -37,9 +40,36 @@ class ArticlesListFragment : Fragment() {
             adapter = articlesAdapter
         }
 
-        vm.articles.observe(this, Observer { articles ->
+//        swipe_refresh.setOnRefreshListener { viewModel.refresh() }
 
+        vm.articles.observe(this, Observer<Resource<List<Article>>> { articles ->
+            when (articles.status) {
+                Status.LOADING -> renderLoading()
+                Status.ERROR -> renderError()
+                Status.SUCCESS -> renderSuccess(articles)
+            }
         })
+    }
+
+    private fun renderLoading() {
+        if (articlesAdapter.itemCount > 0) {
+            swipe_refresh.visible()
+            progress_bar.gone()
+            swipe_refresh.startRefreshing()
+        } else {
+            swipe_refresh.gone()
+            progress_bar.visible()
+            swipe_refresh.stopRefreshing()
+        }
+    }
+
+    private fun renderError() {}
+
+    private fun renderSuccess(articles: Resource<List<Article>>) {
+        progress_bar.gone()
+        swipe_refresh.visible()
+        swipe_refresh.stopRefreshing()
+        articlesAdapter.submitList(articles.data)
     }
 
     companion object {
