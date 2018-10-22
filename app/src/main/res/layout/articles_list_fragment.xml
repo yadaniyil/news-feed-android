@@ -6,30 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.articleslist.ArticlesListFragment">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/articles_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/swipe_refresh">
+        tools:itemCount="20"
+        tools:listitem="@layout/list_item_article">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:itemCount="20"
-            android:id="@+id/articles_list"
-            tools:listitem="@layout/list_item_article">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/articles_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/swipe_refresh"
-        app:layout_constraintEnd_toEndOf="@+id/swipe_refresh"
-        app:layout_constraintStart_toStartOf="@+id/swipe_refresh"
-        app:layout_constraintTop_toTopOf="@+id/swipe_refresh" />
+        app:layout_constraintBottom_toBottomOf="@+id/articles_list"
+        app:layout_constraintEnd_toEndOf="@+id/articles_list"
+        app:layout_constraintStart_toStartOf="@+id/articles_list"
+        app:layout_constraintTop_toTopOf="@+id/articles_list" />
+
+    <TextView
+        android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/loading_error"
+        app:layout_constraintBottom_toBottomOf="@+id/articles_list"
+        app:layout_constraintEnd_toEndOf="@+id/articles_list"
+        app:layout_constraintStart_toStartOf="@+id/articles_list"
+        app:layout_constraintTop_toTopOf="@+id/articles_list" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

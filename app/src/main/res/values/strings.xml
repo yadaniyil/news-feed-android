@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NewsFeedAndroid</string>
+    <string name="loading_error">Loading error</string>
+    <string name="footer_error">Error. Tap to retry.</string>
 </resources>

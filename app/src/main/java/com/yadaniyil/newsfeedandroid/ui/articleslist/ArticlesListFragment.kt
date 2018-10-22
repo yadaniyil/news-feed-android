@@ -1,20 +1,20 @@
 package com.yadaniyil.newsfeedandroid.ui.articleslist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yadaniyil.newsfeedandroid.*
-import com.yadaniyil.newsfeedandroid.models.Article
-import com.yadaniyil.newsfeedandroid.models.Resource
-import com.yadaniyil.newsfeedandroid.models.Status
+import com.yadaniyil.newsfeedandroid.R
+import com.yadaniyil.newsfeedandroid.gone
+import com.yadaniyil.newsfeedandroid.visible
 import kotlinx.android.synthetic.main.articles_list_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.yadaniyil.newsfeedandroid.api.State
 
 class ArticlesListFragment : Fragment() {
 
@@ -33,43 +33,36 @@ class ArticlesListFragment : Fragment() {
 
         viewManager = LinearLayoutManager(activity)
 
-        articlesAdapter = ArticlesAdapter(activity as Context)
+        articlesAdapter = ArticlesAdapter { vm.retry() }
         articles_list.apply {
-            setHasFixedSize(true)
             layoutManager = viewManager
             adapter = articlesAdapter
         }
 
-//        swipe_refresh.setOnRefreshListener { viewModel.refresh() }
+        vm.newsList.observe(this, Observer {
+            articlesAdapter.submitList(it)
+        })
 
-        vm.articles.observe(this, Observer<Resource<List<Article>>> { articles ->
-            when (articles.status) {
-                Status.LOADING -> renderLoading()
-                Status.ERROR -> renderError()
-                Status.SUCCESS -> renderSuccess(articles)
+        tv_error.setOnClickListener { vm.retry() }
+        vm.getState().observe(this, Observer { state ->
+            if (vm.listIsEmpty() && state == State.LOADING) {
+                articles_progress_bar.visible()
+            } else {
+                articles_progress_bar.gone()
+            }
+
+            if (vm.listIsEmpty() && state == State.ERROR) {
+                tv_error.visible()
+            } else {
+                tv_error.gone()
+            }
+
+            if (!vm.listIsEmpty()) {
+                articlesAdapter.setState(state ?: State.DONE)
+                (activity as AppCompatActivity).supportActionBar?.title =
+                        "Articles: ${articlesAdapter.getArticlesCount()}"
             }
         })
-    }
-
-    private fun renderLoading() {
-        if (articlesAdapter.itemCount > 0) {
-            swipe_refresh.visible()
-            progress_bar.gone()
-            swipe_refresh.startRefreshing()
-        } else {
-            swipe_refresh.gone()
-            progress_bar.visible()
-            swipe_refresh.stopRefreshing()
-        }
-    }
-
-    private fun renderError() {}
-
-    private fun renderSuccess(articles: Resource<List<Article>>) {
-        progress_bar.gone()
-        swipe_refresh.visible()
-        swipe_refresh.stopRefreshing()
-        articlesAdapter.submitList(articles.data)
     }
 
     companion object {
